@@ -82,11 +82,44 @@ async def root():
 @app.get("/health")
 async def health():
     """Health check endpoint for Cloud Run."""
-    return {
+    health_data = {
         "status": "healthy",
         "service": "log-analyzer-api",
         "version": settings.app_version
     }
+    
+    # Add enhanced features status if available
+    try:
+        from .agent.graph import ENHANCED_FEATURES_AVAILABLE
+        if ENHANCED_FEATURES_AVAILABLE:
+            health_data["features"] = {
+                "enhanced": os.getenv("USE_ENHANCED_FEATURES", "false").lower() == "true",
+                "caching": os.getenv("ENABLE_CACHING", "true").lower() == "true",
+                "specialized": os.getenv("ENABLE_SPECIALIZED", "true").lower() == "true",
+                "streaming": os.getenv("ENABLE_STREAMING", "true").lower() == "true",
+                "interactive": os.getenv("ENABLE_INTERACTIVE", "false").lower() == "true",
+                "memory": os.getenv("ENABLE_MEMORY", "false").lower() == "true",
+                "monitoring": os.getenv("ENABLE_MONITORING", "true").lower() == "true"
+            }
+            
+            # Add metrics if monitoring is enabled
+            if health_data["features"]["monitoring"]:
+                from .agent.resource_tracker import get_resource_tracker
+                tracker = get_resource_tracker()
+                health_data["metrics"] = {
+                    "resource_usage": tracker.get_current_usage()
+                }
+            
+            # Add cache metrics if caching is enabled
+            if health_data["features"]["caching"]:
+                from .agent.cache_manager import get_cache_manager
+                cache_manager = get_cache_manager()
+                cache_stats = cache_manager.get_performance_stats()
+                health_data["metrics"]["cache_hit_rate"] = cache_stats["overall"]["overall_hit_rate"]
+    except Exception as e:
+        logger.warning(f"Could not get enhanced features status: {str(e)}")
+    
+    return health_data
 
 
 # Ready check endpoint

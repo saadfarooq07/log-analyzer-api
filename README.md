@@ -4,12 +4,26 @@ A FastAPI-based service that analyzes log files using LangGraph and AI models (G
 
 ## Features
 
+### Core Features
 - 🔍 **Intelligent Log Analysis**: Identifies errors, warnings, and patterns in log files
 - 🚀 **Fast Processing**: Optimized for logs up to 10MB
 - 📊 **Structured Output**: Returns issues, suggestions, and diagnostic commands
 - 📚 **Documentation Search**: Finds relevant documentation for identified issues
 - 🌊 **Streaming Support**: Server-Sent Events for real-time analysis updates
 - ☁️ **Cloud Run Ready**: Optimized for serverless deployment
+
+### Enhanced Features (NEW)
+- 💬 **Interactive Mode**: Q&A flow for clarification during analysis
+- 💾 **Memory/Persistence**: Analysis history and context retention
+- 🔄 **Advanced Cycle Detection**: Prevents infinite loops with pattern recognition
+- 🛡️ **Circuit Breaker**: Fault tolerance for external services
+- ⏱️ **API Rate Limiting**: Prevents quota exhaustion
+- 🎯 **Specialized Analyzers**: Domain-specific analysis (HDFS, Security, Application)
+- 🚄 **Advanced Streaming**: Parallel chunk processing for large logs
+- 📈 **Resource Tracking**: Memory and CPU monitoring
+- 🗄️ **Intelligent Caching**: Performance optimization with LRU cache
+
+See [ENHANCED_FEATURES.md](./ENHANCED_FEATURES.md) for detailed documentation.
 
 ## Quick Start
 

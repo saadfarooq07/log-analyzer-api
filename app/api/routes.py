@@ -1,11 +1,12 @@
 """API routes for log analysis."""
 
 from fastapi import APIRouter, HTTPException, Response, BackgroundTasks
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Dict, Any, List, Optional
 import json
 import asyncio
 import time
 import logging
+import uuid
 from sse_starlette.sse import EventSourceResponse
 
 from .models import (
@@ -19,8 +20,16 @@ from .models import (
     StreamEvent,
     ErrorResponse
 )
-from ..agent.graph import create_graph
+from ..agent.graph import create_graph, ENHANCED_FEATURES_AVAILABLE
 from ..config import settings
+
+# Import enhanced features if available
+if ENHANCED_FEATURES_AVAILABLE:
+    from ..agent.cache_manager import get_cache_manager
+    from ..agent.resource_tracker import get_resource_tracker
+    from ..agent.circuit_breaker import get_circuit_breaker_manager
+    from ..agent.interactive_handler import get_interactive_handler
+    from ..agent.memory_manager import get_memory_manager
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -271,3 +280,119 @@ async def analyze_logs_batch(requests: List[LogAnalysisRequest], background_task
         status_code=501,
         detail="Batch analysis not yet implemented. Please analyze logs individually."
     )
+
+
+# Enhanced feature endpoints (only available when enhanced features are enabled)
+if ENHANCED_FEATURES_AVAILABLE:
+    
+    @router.post("/analyze/interactive")
+    async def analyze_logs_interactive(request: LogAnalysisRequest):
+        """Analyze logs with interactive mode enabled."""
+        # Add interactive feature to the request
+        input_state = {
+            "log_content": request.log_content,
+            "environment_details": request.environment_details or {},
+            "application_name": request.application_name,
+            "analysis_type": request.analysis_type,
+            "enabled_features": ["interactive", "caching", "specialized"]
+        }
+        
+        # Create analysis ID for tracking
+        analysis_id = str(uuid.uuid4())
+        input_state["analysis_id"] = analysis_id
+        
+        # Run initial analysis
+        graph = create_graph()
+        result = await graph.ainvoke(input_state)
+        
+        # Check for pending questions
+        response_data = {
+            "analysis_id": analysis_id,
+            "status": "pending" if result.get("pending_questions") else "completed"
+        }
+        
+        if result.get("pending_questions"):
+            response_data["pending_questions"] = result["pending_questions"]
+            response_data["interaction_required"] = True
+        else:
+            response_data["analysis_result"] = result.get("analysis_result", {})
+        
+        return response_data
+    
+    
+    @router.post("/analyze/continue")
+    async def continue_interactive_analysis(
+        analysis_id: str,
+        answers: Dict[str, Any]
+    ):
+        """Continue interactive analysis with user answers."""
+        # Get interactive handler
+        handler = get_interactive_handler()
+        
+        # TODO: Retrieve state from memory/cache
+        # For now, return placeholder
+        return {
+            "analysis_id": analysis_id,
+            "status": "completed",
+            "message": "Interactive continuation will be implemented with state persistence"
+        }
+    
+    
+    @router.get("/metrics/cache")
+    async def get_cache_metrics():
+        """Get cache performance metrics."""
+        cache_manager = get_cache_manager()
+        return cache_manager.get_performance_stats()
+    
+    
+    @router.post("/cache/clear")
+    async def clear_cache():
+        """Clear all caches."""
+        cache_manager = get_cache_manager()
+        cache_manager.clear_all()
+        return {"status": "success", "message": "All caches cleared"}
+    
+    
+    @router.get("/metrics/resources")
+    async def get_resource_metrics():
+        """Get current resource usage metrics."""
+        tracker = get_resource_tracker()
+        return tracker.get_summary()
+    
+    
+    @router.get("/metrics/circuit-breakers")
+    async def get_circuit_breaker_status():
+        """Get circuit breaker status."""
+        manager = get_circuit_breaker_manager()
+        return manager.get_all_stats()
+    
+    
+    @router.get("/history")
+    async def get_analysis_history(
+        limit: int = 10,
+        application_name: Optional[str] = None
+    ):
+        """Get analysis history."""
+        memory_manager = get_memory_manager()
+        await memory_manager.initialize()
+        
+        # TODO: Implement history retrieval
+        return {
+            "history": [],
+            "total": 0,
+            "message": "History retrieval will be implemented with memory persistence"
+        }
+    
+    
+    @router.get("/patterns/{pattern_type}")
+    async def get_known_patterns(pattern_type: str):
+        """Get known patterns of a specific type."""
+        memory_manager = get_memory_manager()
+        await memory_manager.initialize()
+        
+        # TODO: Implement pattern retrieval
+        return {
+            "pattern_type": pattern_type,
+            "patterns": [],
+            "message": "Pattern retrieval will be implemented with memory persistence"
+        }

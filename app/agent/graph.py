@@ -1,18 +1,52 @@
-"""LangGraph workflow for log analysis."""
+"""LangGraph workflow for log analysis with enhanced features."""
 
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
 import logging
+import os
 
 from .state import State
 from .nodes import analyze_logs, validate_analysis
 from .tools import search_documentation, extract_patterns, generate_diagnostic_commands
+
+# Import enhanced graph if available
+try:
+    from .enhanced_graph import create_enhanced_graph, enhanced_graph, full_featured_graph
+    ENHANCED_FEATURES_AVAILABLE = True
+except ImportError:
+    ENHANCED_FEATURES_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
 
 def create_graph():
     """Create the log analysis workflow graph."""
+    
+    # Check if enhanced features are requested
+    use_enhanced = os.getenv("USE_ENHANCED_FEATURES", "false").lower() == "true"
+    
+    if use_enhanced and ENHANCED_FEATURES_AVAILABLE:
+        logger.info("Using enhanced graph with advanced features")
+        # Determine which features to enable
+        features = set()
+        
+        if os.getenv("ENABLE_CACHING", "true").lower() == "true":
+            features.add("caching")
+        if os.getenv("ENABLE_SPECIALIZED", "true").lower() == "true":
+            features.add("specialized")
+        if os.getenv("ENABLE_MONITORING", "true").lower() == "true":
+            features.add("monitoring")
+        if os.getenv("ENABLE_INTERACTIVE", "false").lower() == "true":
+            features.add("interactive")
+        if os.getenv("ENABLE_MEMORY", "false").lower() == "true":
+            features.add("memory")
+        if os.getenv("ENABLE_STREAMING", "true").lower() == "true":
+            features.add("streaming")
+        
+        return create_enhanced_graph(features)
+    
+    # Default basic graph
+    logger.info("Using basic graph")
     
     # Create workflow
     workflow = StateGraph(State)
@@ -67,10 +101,17 @@ def create_graph():
 
 def create_streaming_graph():
     """Create a graph optimized for streaming large logs."""
-    # For now, use the same graph
-    # In the future, this could be optimized for streaming
+    if ENHANCED_FEATURES_AVAILABLE:
+        # Use enhanced graph with streaming enabled
+        return create_enhanced_graph({"streaming", "caching", "specialized"})
+    
+    # Fall back to basic graph
     return create_graph()
 
 
 # Export the compiled graph for LangGraph Cloud
-graph = create_graph()
+# Use enhanced graph by default if available and requested
+if os.getenv("USE_ENHANCED_FEATURES", "false").lower() == "true" and ENHANCED_FEATURES_AVAILABLE:
+    graph = enhanced_graph
+else:
+    graph = create_graph()
