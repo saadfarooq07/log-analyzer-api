@@ -3,5 +3,8 @@
   "graphs": {
     "log_analyzer": "./app/agent/graph.py:graph"
   },
-  "env": ".env"
+  "env": ".env",
+  "python_version": "3.11",
+  "pip_config_file": "requirements.txt",
+  "dockerfile_lines": []
 }

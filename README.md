@@ -81,33 +81,24 @@ Content-Type: application/json
 
 ## Deployment Options
 
-You can deploy this API using either:
-1. **LangGraph Cloud** (Recommended) - Managed LangGraph infrastructure
-2. **Google Cloud Run** - Serverless container platform
+### Option 1: LangGraph Cloud SaaS (Recommended)
 
-## Option 1: LangGraph Cloud Deployment (Recommended)
+The easiest way to deploy - fully managed by LangChain with GitHub integration.
 
-LangGraph Cloud provides managed infrastructure specifically designed for LangGraph applications.
+**Quick Start:**
+1. Push your code to GitHub
+2. Go to [smith.langchain.com](https://smith.langchain.com)
+3. Click "LangGraph" → "New Deployment"
+4. Connect your GitHub repo
+5. Add your API keys
+6. Deploy!
 
-### Quick Deploy
+See [CLOUD_SAAS_DEPLOYMENT.md](./CLOUD_SAAS_DEPLOYMENT.md) for detailed instructions.
 
-```bash
-# Install LangGraph CLI
-pip install -U langgraph-cli
+### Option 2: Self-Hosted Options
 
-# Login to LangGraph Cloud
-langgraph auth login
-
-# Deploy from repository
-langgraph deploy --name log-analyzer-api
-
-# Set environment variables
-langgraph env set GEMINI_API_KEY=your-key
-langgraph env set GROQ_API_KEY=your-key
-langgraph env set TAVILY_API_KEY=your-key
-```
-
-See [LANGGRAPH_CLOUD_DEPLOYMENT.md](./LANGGRAPH_CLOUD_DEPLOYMENT.md) for detailed instructions.
+- **Google Cloud Run**: See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
+- **Standalone Container**: See [LANGGRAPH_CLOUD_DEPLOYMENT.md](./LANGGRAPH_CLOUD_DEPLOYMENT.md)
 
 ## Option 2: Google Cloud Run Deployment
 
