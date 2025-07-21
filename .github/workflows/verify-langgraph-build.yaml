@@ -23,6 +23,6 @@ jobs:
     - name: Install langgraph-cli
       run: pip install langgraph-cli
     - name: Build Docker image
-      run: langgraph build
+      run: langgraph build -t log-analyzer-api
     - name: Launch server briefly for verification
       run: langgraph up & sleep 10 && kill $! || true
