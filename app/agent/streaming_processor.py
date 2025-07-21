@@ -14,9 +14,9 @@ from concurrent.futures import ThreadPoolExecutor
 import aiofiles
 from langchain_core.messages import HumanMessage, AIMessage
 
-from .unified_state import UnifiedState
-from .rate_limiter import get_rate_limiter
-from .circuit_breaker import get_circuit_breaker
+from app.agent.unified_state import UnifiedState
+from app.agent.rate_limiter import get_rate_limiter
+from app.agent.circuit_breaker import get_circuit_breaker
 
 logger = logging.getLogger(__name__)
 

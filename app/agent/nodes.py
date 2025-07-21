@@ -7,10 +7,10 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
-from .state import State
-from .prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT, VALIDATION_PROMPT, STREAMING_CHUNK_PROMPT
-from .tools import search_documentation, extract_patterns, generate_diagnostic_commands
-from ..config import settings
+from app.agent.state import State
+from app.agent.prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT, VALIDATION_PROMPT, STREAMING_CHUNK_PROMPT
+from app.agent.tools import search_documentation, extract_patterns, generate_diagnostic_commands
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 

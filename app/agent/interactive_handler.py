@@ -11,7 +11,7 @@ from datetime import datetime
 import logging
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
-from .unified_state import UnifiedState
+from app.agent.unified_state import UnifiedState
 
 logger = logging.getLogger(__name__)
 

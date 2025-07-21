@@ -5,13 +5,13 @@ from langgraph.prebuilt import ToolNode
 import logging
 import os
 
-from .state import State
-from .nodes import analyze_logs, validate_analysis
-from .tools import search_documentation, extract_patterns, generate_diagnostic_commands
+from app.agent.state import State
+from app.agent.nodes import analyze_logs, validate_analysis
+from app.agent.tools import search_documentation, extract_patterns, generate_diagnostic_commands
 
 # Import enhanced graph if available
 try:
-    from .enhanced_graph import create_enhanced_graph, enhanced_graph, full_featured_graph
+    from app.agent.enhanced_graph import create_enhanced_graph, enhanced_graph, full_featured_graph
     ENHANCED_FEATURES_AVAILABLE = True
 except ImportError:
     ENHANCED_FEATURES_AVAILABLE = False

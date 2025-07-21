@@ -15,7 +15,7 @@ import logging
 from pathlib import Path
 import aiosqlite
 
-from .unified_state import UnifiedState
+from app.agent.unified_state import UnifiedState
 
 logger = logging.getLogger(__name__)
 

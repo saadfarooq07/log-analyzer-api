@@ -12,10 +12,10 @@ from pydantic import Field
 class Settings(BaseSettings):
     """Application settings."""
     
-    # API Keys (required)
-    gemini_api_key: str = Field(..., env="GEMINI_API_KEY")
-    groq_api_key: str = Field(..., env="GROQ_API_KEY")
-    tavily_api_key: str = Field(..., env="TAVILY_API_KEY")
+    # API Keys (optional for module import)
+    gemini_api_key: Optional[str] = Field(None, env="GEMINI_API_KEY")
+    groq_api_key: Optional[str] = Field(None, env="GROQ_API_KEY")
+    tavily_api_key: Optional[str] = Field(None, env="TAVILY_API_KEY")
     
     # Application settings
     app_name: str = "Log Analyzer API"
