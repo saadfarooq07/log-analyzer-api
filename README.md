@@ -79,7 +79,37 @@ Content-Type: application/json
 # Returns Server-Sent Events stream
 ```
 
-## Deployment to Google Cloud Run
+## Deployment Options
+
+You can deploy this API using either:
+1. **LangGraph Cloud** (Recommended) - Managed LangGraph infrastructure
+2. **Google Cloud Run** - Serverless container platform
+
+## Option 1: LangGraph Cloud Deployment (Recommended)
+
+LangGraph Cloud provides managed infrastructure specifically designed for LangGraph applications.
+
+### Quick Deploy
+
+```bash
+# Install LangGraph CLI
+pip install -U langgraph-cli
+
+# Login to LangGraph Cloud
+langgraph auth login
+
+# Deploy from repository
+langgraph deploy --name log-analyzer-api
+
+# Set environment variables
+langgraph env set GEMINI_API_KEY=your-key
+langgraph env set GROQ_API_KEY=your-key
+langgraph env set TAVILY_API_KEY=your-key
+```
+
+See [LANGGRAPH_CLOUD_DEPLOYMENT.md](./LANGGRAPH_CLOUD_DEPLOYMENT.md) for detailed instructions.
+
+## Option 2: Google Cloud Run Deployment
 
 ### Option 1: Deploy from Source (Recommended)
 

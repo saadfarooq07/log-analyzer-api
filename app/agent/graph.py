@@ -70,3 +70,7 @@ def create_streaming_graph():
     # For now, use the same graph
     # In the future, this could be optimized for streaming
     return create_graph()
+
+
+# Export the compiled graph for LangGraph Cloud
+graph = create_graph()
