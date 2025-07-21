@@ -69,10 +69,10 @@ def create_graph():
     # Conditional edge from validate
     def should_continue(state: State) -> str:
         """Determine if we should continue or end."""
-        validation_result = state.get("validation_result", {})
+        validation_result = state.get("validation_result")
         
         # If validation passed or we have a result, end
-        if validation_result.get("is_valid", False) or state.get("analysis_result"):
+        if (validation_result and validation_result.get("is_valid", False)) or state.get("analysis_result"):
             return "end"
         
         # If we have an error, end
