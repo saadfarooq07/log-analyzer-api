@@ -6,10 +6,11 @@ This guide explains how to deploy the Log Analyzer API to LangGraph Cloud, which
 
 1. **LangSmith Account**: Sign up at [smith.langchain.com](https://smith.langchain.com)
 2. **LangGraph Cloud Access**: Request access or check availability
-3. **API Keys**:
-   - GEMINI_API_KEY
-   - GROQ_API_KEY
-   - TAVILY_API_KEY
+3. **GitHub Repository Secrets** (configured in repository settings):
+   - `GEMINI_API_KEY` - Google Gemini API key
+   - `GROQ_API_KEY` - Groq API key  
+   - `TAVILY_API_KEY` - Tavily search API key
+   - `LANGCHAIN_API_KEY` - LangChain API key for LangGraph Cloud
 
 ## Option 1: Deploy via LangGraph CLI
 
@@ -40,11 +41,17 @@ The CLI will:
 
 ### Step 4: Set Environment Variables
 
+The environment variables are automatically configured from GitHub repository secrets during deployment. The following variables are required:
+
 ```bash
-langgraph env set GEMINI_API_KEY=your-key
-langgraph env set GROQ_API_KEY=your-key
-langgraph env set TAVILY_API_KEY=your-key
+GEMINI_API_KEY=${GEMINI_API_KEY}
+GROQ_API_KEY=${GROQ_API_KEY}
+TAVILY_API_KEY=${TAVILY_API_KEY}
+LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}
+USE_IMPROVED_LOG_ANALYZER=true
 ```
+
+These are automatically set by the GitHub Actions workflow from repository secrets.
 
 ## Option 2: Deploy via GitHub Integration
 

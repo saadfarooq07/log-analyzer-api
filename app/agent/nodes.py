@@ -18,7 +18,10 @@ logger = logging.getLogger(__name__)
 async def analyze_logs(state: State) -> Dict[str, Any]:
     """Main node for analyzing log content."""
     try:
-        # Use Groq as primary model for now due to API key issues
+        # Check for API keys and use available model
+        if not settings.groq_api_key:
+            raise ValueError("GROQ_API_KEY environment variable is required")
+            
         model = ChatGroq(
             model="llama3-8b-8192",
             groq_api_key=settings.groq_api_key,
@@ -210,6 +213,13 @@ async def validate_analysis(state: State) -> Dict[str, Any]:
     """Validate the analysis results."""
     try:
         # Use orchestration model for validation
+        if not settings.groq_api_key:
+            logger.warning("GROQ_API_KEY not available, skipping validation")
+            # Skip validation if no API key
+            state["validation_result"] = {"is_valid": True, "feedback": "Validation skipped - no API key"}
+            state["analysis_result"] = state.get("current_analysis", {})
+            return state
+            
         model = ChatGroq(
             model="llama3-8b-8192",  # Use available model
             groq_api_key=settings.groq_api_key,

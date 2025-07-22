@@ -12,10 +12,11 @@ from pydantic import Field
 class Settings(BaseSettings):
     """Application settings."""
     
-    # API Keys (optional for module import)
+    # API Keys (required for LangGraph Cloud)
     gemini_api_key: Optional[str] = Field(None, env="GEMINI_API_KEY")
-    groq_api_key: Optional[str] = Field(None, env="GROQ_API_KEY")
+    groq_api_key: Optional[str] = Field(None, env="GROQ_API_KEY") 
     tavily_api_key: Optional[str] = Field(None, env="TAVILY_API_KEY")
+    langchain_api_key: Optional[str] = Field(None, env="LANGCHAIN_API_KEY")
     
     # Application settings
     app_name: str = "Log Analyzer API"
